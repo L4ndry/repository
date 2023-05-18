@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue@3"></script>
+<script src="https://unpkg.com/vue-router@4"></script>
+
+<div id="app">
+  <h1>Hello App!</h1>
+  <a href=""></a>
+  <p>
+    <!-- use the router-link component for navigation. -->
+    <!-- specify the link by passing the `to` prop. -->
+    <!-- `<router-link>` will render an `<a>` tag with the correct `href` attribute -->
+    <router-link to="/" class="btn btn-primary" style="margin:1rem 1rem ;">Go to Home</router-link>
+    <router-link to="/prodotti"class="btn btn-warning">Go to Prodotti</router-link>
+  </p>
+  <!-- route outlet -->
+  <!-- component matched by the route will render here -->
+  <router-view></router-view>
+</div>
+<script>
+    // 1. Define route components.
+// These can be imported from other files
+    const Home = { template: '<div>Home</div>' }
+    const Prodotti = { 
+        data(){
+                    return {
+                        prodotti:[],
+                        favorite:[]
+                    }
+            },
+        methods:{
+                loadProdotti(){
+                    const url='https://fakestoreapi.com/products';
+                    fetch(url)
+                        .then(res => res.json())
+                        .then(data => this.prodotti=data)
+                },
+                addF(id){
+                    this.favorite.push(this.prodotti[id]);
+                    console.log(this.favorite);
+                    let button=this.$el.querySelector('#add');
+                    button.innerText='Added';
+                    b
+
+                }
+
+            },
+            mounted(){
+                this.loadProdotti();
+            },
+            template: `<div> 
+                <table class ="table table-dark table-bordered">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Image</th>
+                    <th>Favorite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(prodotto,index) in prodotti">
+                    <th>{{index+1}}</th>
+                    <td><router-link :to= "{name:'product',params:{id:prodotto.id}}" style="color:white;text-decoration:none">{{prodotto.title}}</router-link></td>
+                    <td>{{prodotto.price}}€</td>
+                    <td>{{prodotto.category}}</td>
+                    <td><img :src="prodotto.image" style="height:100px;width:100px"></td>
+                    <td><button id="add" class="btn btn-success" @click.once="addF(index)">Add</button></td>
+
+                </tr>
+            </tbody>
+        </table>
+                    </div>` }
+    // 2. Define some routes
+    // Each route should map to a component.
+    // We'll talk about nested routes later.
+    const Title={
+        data(){
+                    return {
+                        prodotto:{},
+                    }
+            },
+        methods:{
+            loadProdotto(){
+                const url= 'https://fakestoreapi.com/products/'+this.$route.params.id;
+                fetch(url)
+                    .then(res=>res.json())
+                    .then(data=>this.prodotto=data);
+            }
+        },
+        mounted(){
+            this.loadProdotto();
+        },
+        template:`<div>
+            <table class ="table table-dark table-bordered">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{{prodotto.id}}</th>
+                    <td>{{prodotto.title}}</td>
+                    <td>{{prodotto.price}}</td>
+                    <td>{{prodotto.category}}</td>
+                    <td><img :src="prodotto.image" style="height:100px;width:100px"></td>
+                </tr>
+            </tbody>
+        </table>
+                </div>`
+    }
+    const routes = [
+    { path: '/', component: Home },
+    { path: '/prodotti', component: Prodotti },
+    { path: '/prodotti/:id', component: Title,name: 'product'},
+    ]
+
+    // 3. Create the router instance and pass the `routes` option
+    // You can pass in additional options here, but let's
+    // keep it simple for now.
+    const router = VueRouter.createRouter({
+    // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
+    history: VueRouter.createWebHashHistory(),
+    routes, // short for `routes: routes`
+    })
+
+    // 5. Create and mount the root instance.
+    const app = Vue.createApp({})
+    // Make sure to _use_ the router instance to make the
+    // whole app router-aware.
+    app.use(router)
+
+    app.mount('#app')
+
+    // Now the app has started!
+</script>
+</body>
+</html>
