@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
     <title>Document</title>
 </head>
-<body>
+<body class="bg-dark">
     <script src="https://unpkg.com/vue@3"></script>
 <script src="https://unpkg.com/vue-router@4"></script>
 
 <div id="app">
-  <h1>Hello App!</h1>
+  <h1 style="color: antiquewhite;">Hello App!</h1>
   <a href=""></a>
   <p>
     <!-- use the router-link component for navigation. -->
     <!-- specify the link by passing the `to` prop. -->
     <!-- `<router-link>` will render an `<a>` tag with the correct `href` attribute -->
     <router-link to="/" class="btn btn-primary" style="margin:1rem 1rem ;">Go to Home</router-link>
-    <router-link to="/prodotti"class="btn btn-warning">Go to Prodotti</router-link>
+    <router-link to="/prodotti"class="btn btn-success">Go to Prodotti</router-link>
   </p>
   <!-- route outlet -->
   <!-- component matched by the route will render here -->
@@ -28,7 +28,7 @@
 <script>
     // 1. Define route components.
 // These can be imported from other files
-    const Home = { template: '<div>Home</div>' }
+    const Home = { template: '<div style="color:antiquewhite;">Home</div>' }
     const Prodotti = { 
         data(){
                     return {
@@ -59,7 +59,7 @@
             template: `<div> 
                 <table class ="table table-dark table-bordered">
             <thead>
-                <tr>
+                <tr style="color:antiquewhite;">
                     <th>id</th>
                     <th>Titre</th>
                     <th>Price</th>
